@@ -1,0 +1,10 @@
+﻿- name: Create files on cluster1 nodes
+  hosts: cluster1
+  become: yes
+  remote_user: vagrant
+  tasks:
+    - name: Create a file
+      copy:
+        dest: /tmp/test.txt
+        content: "test\n"
+        

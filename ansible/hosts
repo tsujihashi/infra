@@ -1,0 +1,7 @@
+﻿# copy this file to /etc/ansible/hosts
+
+[cluster1]
+cluster1-m0 ansible_host=192.168.241.100 ip=192.168.241.100
+cluster1-m1 ansible_host=192.168.241.101 ip=192.168.241.101
+cluster1-w0 ansible_host=192.168.241.200 ip=192.168.241.200
+cluster1-w1 ansible_host=192.168.241.201 ip=192.168.241.201
