@@ -1,0 +1,31 @@
+---
+- hosts: utils
+  become: yes
+  remote_user: tsuji
+  tasks:
+    - name: create jdk directory
+      file:
+        path: /opt/jdk
+        state: directory
+        mode: '0755'
+    - name: copy jdk
+      copy:
+        src: /opt/jdk/jdk-21_linux-x64_bin.deb
+        dest: /opt/jdk/
+    - name: install jdk
+      apt:
+        deb: /opt/jdk/jdk-21_linux-x64_bin.deb
+    - name: create liberty directory
+      file:
+        path: /opt/liberty
+        state: directory
+        mode: '0755'
+    - name: unarchive liberty
+      unarchive:
+        src: /opt/liberty/openliberty-example.zip
+        dest: /opt/liberty/
+    - name: start liberty
+      shell: |
+        cd /opt/liberty
+        ./mvnw liberty:run &
+        
