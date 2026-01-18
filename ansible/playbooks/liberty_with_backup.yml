@@ -1,0 +1,35 @@
+- hosts: utils
+  become: yes
+  remote_user: tsuji
+  tasks:
+    - name: 
+      block:
+        - name: backup jdk deb (must succeed)
+          copy:
+            src: /opt/jdk/jdk-21_linux-x64_bin.deb
+            dest: /opt/jdk/jdk-21_linux-x64_bin.deb.bak
+            remote_src: yes
+          register: backup_jdk
+
+        - name: ensure backup exists
+          stat:
+            path: /opt/jdk/jdk-21_linux-x64_bin.deb.bak
+          register: backup_jdk_stat
+
+        - name: fail if backup missing
+          fail:
+            msg: "backup of jdk deb failed. aborting."
+          when: not backup_jdk_stat.stat.exists
+
+        # ここから先は「バックアップ成功後」だけ実行される
+        - name: copy jdk
+          copy:
+            src: /opt/jdk/jdk-21_linux-x64_bin.deb
+            dest: /opt/jdk/
+
+      rescue:
+        - name: stop play due to backup failure
+          fail:
+            msg: "play aborted because backup could not be created"
+
+      
