@@ -1,5 +1,12 @@
 ﻿# copy this file to /etc/ansible/hosts
 
+[vmhosts]
+nuc ansible_hosts=192.168.241.30 ip=192.168.241.30
+un100 ansible_hosts=192.168.241.31 ip=192.168.241.31
+
+[utils]
+vm1 ansible_hosts=192.168.241.50 ip=192.168.241.50
+
 [cluster1]
 cluster1-m0 ansible_host=192.168.241.100 ip=192.168.241.100
 cluster1-m1 ansible_host=192.168.241.101 ip=192.168.241.101
