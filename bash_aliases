@@ -59,6 +59,10 @@ alias viahos='vi /etc/ansible/hosts'
 alias ap='ansible-playbook'
 alias ap-lt='ansible-playbook --list-tasks'
 alias ap-lh='ansible-playbook --list-hosts'
+alias ai='ansible-inventory'
+alias ai-l='ansible-inventory --list'
+alias ai-g='ansible-inventory --graph'
+
 
 # ssh
 alias ssha='cat ~/.ssh/authorized_keys'
@@ -80,4 +84,3 @@ function kcdp(){ CMD='kubectl describe pod'; echo '>' $CMD $*; $CMD $*; }
 
 #custom
 alias app1='cd ~/Web/app1;uvicorn main:app'
-
