@@ -9,6 +9,8 @@ alias gl='git log'
 alias gr='gitlab-runner'
 alias grs='git reset --soft HEAD^'
 alias gitssh='git remote set-url origin git@github.com:tsujihashi/infra.git'
+alias grmt='git remote -v'
+alias gcf='git config -l'
 
 # common
 alias ll='ls -l'
