@@ -1,0 +1,58 @@
+ANSIBLE_CONFIG=../ansible.cfg
+2026-02-04 01:34:00,272 p=89972 u=tsujihashi n=ansible INFO| PLAY [List set theory filters] *************************************************
+2026-02-04 01:34:00,288 p=89972 u=tsujihashi n=ansible INFO| TASK [Test unique] *************************************************************
+2026-02-04 01:34:00,353 p=89972 u=tsujihashi n=ansible INFO| ok: [localhost] => {
+    "msg": [
+        1,
+        2,
+        3,
+        4
+    ]
+}
+2026-02-04 01:34:00,356 p=89972 u=tsujihashi n=ansible INFO| TASK [Test intersect(A AND B)] *************************************************
+2026-02-04 01:34:00,412 p=89972 u=tsujihashi n=ansible INFO| ok: [localhost] => {
+    "msg": [
+        3,
+        4
+    ]
+}
+2026-02-04 01:34:00,417 p=89972 u=tsujihashi n=ansible INFO| TASK [Test union(A OR B)] ******************************************************
+2026-02-04 01:34:00,477 p=89972 u=tsujihashi n=ansible INFO| ok: [localhost] => {
+    "msg": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+    ]
+}
+2026-02-04 01:34:00,481 p=89972 u=tsujihashi n=ansible INFO| TASK [Test symmetric_difference(A XOR B)] **************************************
+2026-02-04 01:34:00,528 p=89972 u=tsujihashi n=ansible INFO| ok: [localhost] => {
+    "msg": [
+        1,
+        2,
+        5,
+        6
+    ]
+}
+2026-02-04 01:34:00,531 p=89972 u=tsujihashi n=ansible INFO| TASK [Test difference(A-B)] ****************************************************
+2026-02-04 01:34:00,573 p=89972 u=tsujihashi n=ansible INFO| ok: [localhost] => {
+    "msg": [
+        1,
+        2
+    ]
+}
+2026-02-04 01:34:00,577 p=89972 u=tsujihashi n=ansible INFO| TASK [assert] ******************************************************************
+2026-02-04 01:34:00,624 p=89972 u=tsujihashi n=ansible WARNING| [WARNING]: conditional statements should not include jinja2 templating
+delimiters such as {{ }} or {% %}. Found: {{ list_A |
+symmetric_difference(list_C) | length }} == 0
+
+2026-02-04 01:34:00,632 p=89972 u=tsujihashi n=ansible INFO| fatal: [localhost]: FAILED! => {
+    "assertion": "{{ list_A | symmetric_difference(list_C) | length }} == 0",
+    "changed": false,
+    "evaluated_to": false,
+    "msg": "[1, 2, 3, 4]==[1, 2, 3, 4, 5]\nNG."
+}
+2026-02-04 01:34:00,634 p=89972 u=tsujihashi n=ansible INFO| PLAY RECAP *********************************************************************
+2026-02-04 01:34:00,634 p=89972 u=tsujihashi n=ansible INFO| localhost                  : ok=5    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
