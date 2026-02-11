@@ -1,0 +1,98 @@
+---
+- name: Upgrade RHEL
+  #hosts: rhel_servers
+  become: yes
+  gather_facts: yes
+
+  vars:
+    backup_base_dir: /backup/rhel
+    release_version: "8.10"
+    backup_date: "{{ ansible_date_time.date | replace('-', '') }}"
+
+  gather_facts: false
+  tasks:
+    - name: gather date and time only
+      setup:
+        gather_subset:
+          - "date_time"
+        when: ansible_date_time is not defined
+
+    - name: Ensure system is RHEL 8
+      assert:
+        that:
+          - ansible_distribution == "RedHat"
+          - ansible_distribution_major_version == "8"
+        fail_msg: "This playbook supports only RHEL 8"
+
+    - name: Create backup directory
+      file:
+        path: "{{ backup_base_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Create dated backup directory
+      file:
+        path: "{{ backup_base_dir }}/{{ backup_date }}"
+        state: directory
+
+    - name: Backup /etc directory
+      archive:
+        path: /etc
+        dest: "{{ backup_base_dir }}/{{ backup_date }}/etc_backup.tar.gz"
+        format: gz
+
+    - name: Backup yum repo files
+      archive:
+        path: /etc/yum.repos.d
+        dest: "{{ backup_base_dir }}/{{ backup_date }}/repos_backup.tar.gz"
+        format: gz
+
+    - name: Check current RHEL version
+      command: cat /etc/redhat-release
+      register: current_version
+
+    - debug:
+        msg: "Current version: {{ current_version.stdout }}"
+
+    - name: Clean dnf cache
+      command: dnf clean all
+
+    #################################################################
+    # 2. パッケージリスト更新確認
+    #################################################################
+
+    - name: List available updates
+      ansible.builtin.dnf:
+        list: updates
+      register: updates_list
+
+    - debug:
+        msg: "{{ updates_list.results | length}}"
+
+    #################################################################
+    # 3. 全パッケージ update 実行
+    #################################################################
+
+    - name: Update all packages (dnf update -y)
+      dnf:
+        name: "*"
+        state: latest
+        releasever: "{{ release_version }}"
+      register: upgrade_result
+
+    # - name: Upgrade to RHEL {{ release_version }}
+    #   command: >
+    #     dnf upgrade -y --releasever={{ release_version }}
+    #   register: upgrade_result
+
+    # - name: Reboot system
+    #   reboot:
+    #     reboot_timeout: 1800
+    #   when: upgrade_result.rc == 0
+
+    - name: Verify new version
+      command: cat /etc/redhat-release
+      register: new_version
+
+    - debug:
+        msg: "Upgraded version: {{ new_version.stdout }}"

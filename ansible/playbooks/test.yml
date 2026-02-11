@@ -1,36 +1,73 @@
 ---
 - name: "List set theory filters"
-  hosts: localhost
+  # hosts: test
+  # hosts: localhost
+  hosts: all
+  environment:
+    LANG: en_US.UTF-8
+  remote_user: tsuji
+  become: yes
   vars:
-    list_unique: [1, 2, 3, 2, 3, 4]    # 2と3が重複
-    list_A: [1, 2, 3, 4]   # 3と4が重複
+    today: "{{ ansible_date_time.date | replace('-', '') }}"
+    dest_dir: "/tmp/{{ today }}"
+    src_dir: "../src"
+    aaa: "{{ src_dir }}/aaa.txt"
+    files:
+      - "{{ src_dir }}/aaa.txt"
+      - "{{ src_dir }}/bbb.txt"
+      - "{{ src_dir }}/ccc.txt"
+
+    list_unique: [1, 2, 3, 2, 3, 4] # 2と3が重複
+    list_A: [1, 2, 3, 4] # 3と4が重複
     list_B: [3, 4, 5, 6]
-    list_C: [1, 2, 3, 4,5]
+    list_C: [1, 2, 3, 4, 5]
+
   gather_facts: false
   tasks:
-    - name: Test unique
-      debug:
-        msg: "{{ list_unique | unique }}"
+    - name: gather date and time only
+      setup:
+        gather_subset:
+          - "date_time"
+      when: ansible_date_time is not defined
 
-    - name: Test intersect(A AND B)
-      debug:
-        msg: "{{ list_A | intersect(list_B) }}"
+    - name: "create dest_dir: {{ dest_dir }}"
+      file:
+        path: "{{ dest_dir }}"
+        state: directory
 
-    - name: Test union(A OR B)
-      debug:
-        msg: "{{ list_A | union(list_B) }}"
+    - name: copy files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ dest_dir }}/"
+      loop: "{{ files }}"
 
-    - name: Test symmetric_difference(A XOR B)
+    - name: debug
       debug:
-        msg: "{{ list_A | symmetric_difference(list_B) }}"
+        msg: "{{ dest_dir }}"
 
-    - name: Test difference(A-B)
-      debug:
-        msg: "{{ list_A | difference(list_B) }}"
+    # - name: Test unique
+    #   debug:
+    #       msg: "{{ list_unique | unique }}"
 
-    - name:
-      assert:
-        that:
-          - "{{ list_A | symmetric_difference(list_C) | length }} == 0"
-        fail_msg: "{{ list_A }}=={{ list_C }}\nNG."
-        success_msg: "{{ list_A }}=={{ list_C }}\nOK"
+    # - name: Test intersect(A AND B)
+    #   debug:
+    #       msg: "{{ list_A | intersect(list_B) }}"
+
+    # - name: Test union(A OR B)
+    #   debug:
+    #       msg: "{{ list_A | union(list_B) }}"
+
+    # - name: Test symmetric_difference(A XOR B)
+    #   debug:
+    #       msg: "{{ list_A | symmetric_difference(list_B) }}"
+
+    # - name: Test difference(A-B)
+    #   debug:
+    #       msg: "{{ list_A | difference(list_B) }}"
+
+    # - name:
+    #   assert:
+    #       that:
+    #           - "{{ list_A | symmetric_difference(list_C) | length }} == 0"
+    #       fail_msg: "{{ list_A }}=={{ list_C }}\nNG."
+    #       success_msg: "{{ list_A }}=={{ list_C }}\nOK"
