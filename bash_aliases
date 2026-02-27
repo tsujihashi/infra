@@ -74,15 +74,15 @@ alias sshi='cat ~/.ssh/id_rsa.pub'
 function aw(){ awk -v c=$1 '{print $c}'; }
 function func(){ grep function ~/.bash_aliases; }
 # kube
-function kc(){ CMD='kubectl'; echo '>' $CMD $*; $CMD $*; }
-function kcg(){ CMD='kubectl get'; echo '>' $CMD $*; $CMD $*; }
-function kcd(){ CMD='kubectl describe'; echo '>' $CMD $*; $CMD $*; }
-function kcgn(){ CMD='kubectl get nodes'; echo '>' $CMD $*; $CMD $*; }
-function kcgs(){ CMD='kubectl get services'; echo '>' $CMD $*; $CMD $*; }
-function kcgp(){ CMD='kubectl get pods'; echo '>' $CMD $*; $CMD $*; }
-function kcdn(){ CMD='kubectl describe nodes'; echo '>' $CMD $*; $CMD $*; }
-function kcds(){ CMD='kubectl describe service'; echo '>' $CMD $*; $CMD $*; }
-function kcdp(){ CMD='kubectl describe pod'; echo '>' $CMD $*; $CMD $*; }
+function kc(){ CMD='sudo kubectl'; echo '>' $CMD $*; $CMD $*; }
+function kcg(){ CMD='sudo kubectl get'; echo '>' $CMD $*; $CMD $*; }
+function kcd(){ CMD='sudo kubectl describe'; echo '>' $CMD $*; $CMD $*; }
+function kcgn(){ CMD='sudo kubectl get nodes'; echo '>' $CMD $*; $CMD $*; }
+function kcgs(){ CMD='sudo kubectl get services'; echo '>' $CMD $*; $CMD $*; }
+function kcgp(){ CMD='sudo kubectl get pods'; echo '>' $CMD $*; $CMD $*; }
+function kcdn(){ CMD='sudo kubectl describe nodes'; echo '>' $CMD $*; $CMD $*; }
+function kcds(){ CMD='sudo kubectl describe service'; echo '>' $CMD $*; $CMD $*; }
+function kcdp(){ CMD='sudo kubectl describe pod'; echo '>' $CMD $*; $CMD $*; }
 
 #custom
 alias app1='cd ~/Web/app1;uvicorn main:app'
