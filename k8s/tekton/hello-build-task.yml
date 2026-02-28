@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: hello-build-task
+spec:
+  steps:
+    - name: say-hello
+      image: ubuntu
+      script: |
+        echo "Hello Tekton!"
