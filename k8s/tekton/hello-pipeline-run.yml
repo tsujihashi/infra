@@ -5,3 +5,15 @@ metadata:
 spec:
   pipelineRef:
     name: hello-pipeline
+
+  podTemplate:
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000 #tsuji
+      seccompProfile:
+        type: RuntimeDefault
+
+  taskRunTemplate:
+    podTemplate:
+      securityContext:
+        fsGroup: 1000
